@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>WOT for every thing</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-color="#17b2c3">
+					<h1>WOT for every thing</h1>
+					<p>by Christian 'Jaller' Paul</p>
+					<p>on 2024-11-14</p>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					What are the limits of IoT?
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2018_youtube.png">
+					<p>My WoT journey started building things with Express.js, e.g. a countdown and a virtual lamp.<br>I even recorded a tutorial about it.</p>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Building a Thing server</h3>
+					<ol>
+						<li>Define the server</li>
+						<li>Define the Things</li>
+						<li>Let the server expose the things</li>
+					</ol>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<p>But what if there are too many Things you want to represent? It would be too much for your CPU, storage, RAM and network to handle them all simultaneously.
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2019_osm-forum-post.png">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/vpl-osm.png">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/vpl-webthings.png">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Building a dynamic Thing server</h3>
+					<ol>
+						<li>Define the server</li>
+						<li>Start the server</li>
+						<li>Initialize Things on demand</li>
+					</ol>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<p>
+						Vancouver Public Library:<br>
+						/osm/opening-hours/way/37111640
+					</p>
+					<ul>
+						<li>osm - My application ID (osm = OpenStreetMap)</li>
+						<li>opening-hours - A sub-application ID</li>
+						<li>way - OpenStreetMap type</li>
+						<li>37111640 - The way ID of the library on OSM</li>
+					</ul>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>When a new element gets requested</h3>
+					<ol>
+						<li>Fetch element on OpenStreetMap</li>
+						<li>Resolve address to a timezone</li>
+						<li>Fetch the local holiday days</li>
+						<li>Parse the opening_hours string</li>
+						<li>Set timeouts for when the place opens / closes</li>
+					</ol>
+				</section>
+
+				<section data-background-color="#17b2c3">
+					<p>🌌 WoT Anything</p>
+					<p>An extensible Thing server with on demand initialisation of Things</p>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/youbike-station-irl.jpg">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					City bike station:<br>
+					<span>/youbikes/501202040</span>
+				</section>
+				<section>
+					See a YouBike station in Taiwan:<br>
+					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/youbikes/501202040">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/youbikes/501202040</a>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<p>WoT Anything matches the API operations</p>
+					<ul>
+						<li>getDescription</li>
+						<li>getProperty (= readproperty)</li>
+						<li>getPropertyEventEmitter (= observeproperty)</li>
+						<li>getAllProperties (= readallproperties)</li>
+						<li>etc.</li>
+					</ul>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					In summer, I got my hands on professional lighting equipment. It uses the IP-based Art-Net protocol which I translated to WoT.
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Art-Net universe:<br>
+					<span>/art-net</span><span>/1</span>
+				</section>
+				<section>
+					See an Art-Net universe with 512 channels:<br>
+					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1</a>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Art-Net channels:<br>
+					<span>/art-net/1</span><span>-19</span><span>-10</span>
+					<p>universe <strong>1</strong><br>starting with channel <strong>19</strong><br>a total of <strong>10</strong> channels</p>
+				</section>
+				<section>
+					See an Art-Net channel range:<br>
+					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1-19-10">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1-19-10</a>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2024_art-net-spot.jpg">
+					<p>MH-x30 LED Beam Moving Head</p>
+					<p>(no advertisement, just the lamp I had available for testing)</p>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Art-Net for an MH-x30 LED Beam in its 10 channel mode:<br>
+					<span>/art-net/1-19-mh-x30-led-beam-10</span>
+					<p>We replaced the trailing "-10" with a product name for meaningful property names.</p>
+				</section>
+				<section>
+					See an Art-Net range for a specific LED beam:<br>
+					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1-19-mh-x30-led-beam-10">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1-19-mh-x30-led-beam-10</a>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Note, all three Art-Net Things you just tried, share some or all channels. The mapping is performed by the WoT Anything server.
+				</section>
+
+				<section data-background-color="#17b2c3">
+					<p>🌌 WoT Wrench</p>
+					<p>A web app to test and debug Things. It's a consumer.</p>
+				</section>
+				<section>
+					See it generate some UI for these virtual Things:<br>
+					
+					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/basics-ro">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/basics-ro</a>
+					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/base64-media-ro">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/base64-media-ro</a>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					The Godot game engine supports HTTP requests and Websockets, so it's possible to integrate WoT into games.
+				</section>
+
+				<section data-background-color="#17b2c3">
+					What are the limits of IoT?
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Available features</h3>
+					<ul>
+						<li>HTTP</li>
+						<li>Server-Sent-Events (SSE)</li>
+						<li>Websockets</li>
+						<li>Getting, setting and observing Properties</li>
+						<li>Invoking synchronous Actions</li>
+						<li>Basic types</li>
+						<li>Nullable Properties</li>
+						<li>Base64-encoded media</li>
+					</ul>
+				</section>
+				
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Incomplete feature wishlist</h3>
+					<ul>
+						<li>Optimistic UI</li>
+						<li>Observing Events</li>
+						<li>Async Actions</li>
+						<li>Input selector</li>
+						<li>uriVariables</li>
+						<li>Languages</li>
+						<li>Thing Models</li>
+						<li>JSON-LD</li>
+						<li>Tests for everything</li>
+						<li>Documentation for everything</li>
+						<li>Security mechanisms</li>
+					</ul>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>How to support me?</h3>
+					<ul>
+						<li>Provide mentorship for self-employment</li>
+						<li>Hire me to work on these projects</li>
+						<li>Help with the UX design</li>
+						<li>Send me your things (TDs, URLs)</li>
+						<li>Talk to me online or at WoT Week in November 2024</li>
+					</ul>
+				</section>
+				<section data-background-color="#289b85">
+					<h3>Thank you for your attention!</h3>
+					<img src="imgs/chrpaul-about-white.gif">
+					<p>chrpaul.de/about</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

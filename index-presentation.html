@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>WOT for every thing</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-color="#17b2c3">
+					<h1>WOT for every thing</h1>
+					<p>by Christian 'Jaller' Paul</p>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					What are the limits of IoT?
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2018_youtube.png">
+				</section>
+				<section  data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)" data-auto-animate>
+					<h2 data-id="code-title">node-wot</h2>
+					<pre data-id="code-animation"><code class="hljs javascript" data-trim data-line-numbers="|4-8|11-27|30"><script type="text/template">
+						// Required steps to create a servient for creating a thing
+						const { Servient } = require("@node-wot/core");
+						const { HttpServer } = require("@node-wot/binding-http");
+
+						const servient = new Servient();
+						servient.addServer(new HttpServer());
+
+						servient.start().then( async (WoT) => {
+							// Then from here on you can use the WoT object to produce the thing
+							let count = 0;
+							const exposingThing = await WoT.produce({
+								title: "Counter",
+								description: "A simple counter thing",
+								properties: {
+									count: {
+										type: "integer",
+										description: "current counter value",
+										observable: true,
+										readOnly: true
+									}
+								},
+								actions: {
+									increment: {
+										description: "increment counter value",
+									}
+								}
+							})
+							exposingThing.setPropertyReadHandler("count", () => { return count; });
+							exposingThing.setActionHandler("increment", () => { count++; exposingThing.emitPropertyChange("count"); });
+							await exposingThing.expose();
+							// now you can interact with the thing via http://localhost:8080/counter
+						});
+					</script></code></pre>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<section>
+						<ol>
+							<li>Define the server</li>
+							<li>Define the things</li>
+							<li>Let the server expose the things</li>
+						</ol>
+					</section>
+					<section data-background-gradient="linear-gradient(to top, #083b25, #074243)">
+						<img src="imgs/lion-king-meme.jpg">
+					</section>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2019_osm-forum-post.png">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/vpl-osm.png">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/vpl-webthings.png">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<ol>
+						<li>Define the server</li>
+						<li>Start the server</li>
+						<li>Define the things on demand</li>
+					</ol>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<section>
+						Vancouver Public Library:<br>
+						/osm/opening-hours/way/37111640
+					</section>
+					<section>
+						<ol>
+							<li>Fetch element on OpenStreetMap</li>
+							<li>Resolve address to a timezone</li>
+							<li>Fetch the local holiday days</li>
+							<li>Parse the opening_hours string</li>
+							<li>Set timeouts for when the place opens / closes</li>
+						</ol>
+					</section>
+				</section>
+
+				<section data-background-color="#17b2c3">
+					<p>🌌 WoT Anything</p>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/youbike-station-irl.jpg">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					City bike station:<br>
+					<span class="fragment">/youbikes</span><span class="fragment">/501202040</span>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<p>WoT Anything matches the API operations</p>
+					<ul>
+						<li>getDescription</li>
+						<li class="fragment">getProperty</li>
+						<li class="fragment">getPropertyEventEmitter</li>
+						<li class="fragment">getMultipleProperties</li>
+						<li class="fragment">getAllProperties</li>
+					</ul>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/youbikes/501202040" data-background-interactive>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2024_art-net-photo.jpg">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<video data-autoplay src="imgs/2024_art-net-video.mp4"></video>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Art-Net universe:<br>
+					<span class="fragment">/art-net</span><span class="fragment">/1</span>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1" data-background-interactive>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Art-Net channels:<br>
+					<span>/art-net/1</span><span class="fragment">-19</span><span class="fragment">-10</span>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1-19-10" data-background-interactive>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/2024_art-net-spot.jpg">
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					Art-Net spot light:<br>
+					<span>/art-net/1-19</span><span class="fragment">-mh-x30-led-beam-10</span>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/art-net/1-19-mh-x30-led-beam-10" data-background-interactive>
+				</section>
+
+				<section data-background-color="#17b2c3">
+					<p>🌌 WoT Wrench</p>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/basics" data-background-interactive>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/base64-media" data-background-interactive>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/image-storage/1" data-background-interactive>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/moods/1" data-background-interactive>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/mood-collections/1" data-background-interactive>
+				</section>
+
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/test-property-types/special" data-background-interactive>
+				</section>
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/dice/d20,https://wot.chrpaul.de/dnd/1" data-background-interactive>
+				</section>
+
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/maptilers/1" data-background-interactive>
+				</section>
+
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/reveal.js/1" data-background-interactive>
+				</section>
+
+				<section data-background-color="#17b2c3">
+					What are the limits of IoT?
+				</section>
+
+				<section data-background-iframe="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/trains/1" data-background-interactive>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<section data-background-color="#17b2c3">
+						What are the limits of IoT?
+					</section>
+					<section>
+						<h3>Available features</h3>
+						<ul>
+							<li>HTTP</li>
+							<li>Server-Sent-Events (SSE)</li>
+							<li>Websockets</li>
+							<li>Getting, setting and observing Properties</li>
+							<li>Invoking synchronous Actions</li>
+							<li>Basic types</li>
+							<li>Nullable Properties</li>
+							<li>Base64-encoded media</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Feature wishlist</h3>
+						<ul>
+							<li>Optimistic UI</li>
+							<li>Observing Events</li>
+							<li>Async Actions</li>
+							<li>Input selector</li>
+							<li>uriVariables</li>
+							<li>Languages</li>
+							<li>Thing Models</li>
+							<li>JSON-LD</li>
+							<li>Tests for everything</li>
+							<li>Documentation for everything</li>
+							<li>Security mechanisms</li>
+						</ul>
+					</section>
+				</section>
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>How to support me?</h3>
+					<ul>
+						<li>Provide mentorship for self-employment</li>
+						<li>Hire me to work on these projects</li>
+						<li>Help with the UX design</li>
+						<li>Send me your things (TDs, URLs)</li>
+						<li>Talk to me online or at WoT Week</li>
+					</ul>
+				</section>
+				<section data-background-color="#289b85">
+					<h3>Thank you for your attention!</h3>
+					<img src="imgs/chrpaul-about-white.gif">
+					<p>chrpaul.de/about</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
