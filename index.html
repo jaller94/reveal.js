@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>WOT for every thing</title>
+		<title>Shenanigangs with WoT</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -12,15 +12,102 @@
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		
+		<!-- Custom styles to override theme defaults -->
+		<style>
+			:root {
+				--r-heading-text-transform: none;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 				<section data-background-color="#17b2c3">
-					<h1>WOT for every thing</h1>
+					<h1>Shenanigangs with WoT</h1>
 					<p>by Christian 'Jaller' Paul</p>
-					<p>on 2024-11-14</p>
+					<p>on 2025-08-09</p>
 				</section>
+
+				<!-- Web of Things Introduction Section -->
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h2>What is the Web of Things?</h2>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<img src="imgs/standards.png">
+					<p>xkcd 927</p>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Internet of Things</h3>
+					<p style="font-size: 2em; text-align: center;">📱 💡 🚗 🏠</p>
+					<p>Connected devices everywhere</p>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>The Problem</h3>
+					<ul>
+						<li>Proprietary protocols</li>
+						<li>Vendor lock-in</li>
+						<li>Fragmented ecosystem</li>
+					</ul>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Web of Things</h3>
+					<p style="font-size: 1.5em;">IoT + Web Standards</p>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Web Standards</h3>
+					<ul>
+						<li>HTTP/HTTPS</li>
+						<li>JSON</li>
+						<li>WebSockets</li>
+						<li>REST APIs</li>
+					</ul>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Thing Description</h3>
+					<p>JSON-LD metadata</p>
+					<p>Describes device capabilities</p>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Three Interaction Models</h3>
+					<ul>
+						<li><strong>Properties</strong> - Read/Write state</li>
+						<li><strong>Actions</strong> - Invoke functions</li>
+						<li><strong>Events</strong> - Subscribe to notifications</li>
+					</ul>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Example: Smart Lamp</h3>
+					<ul>
+						<li><strong>Property:</strong> brightness, color</li>
+						<li><strong>Action:</strong> toggle, fade</li>
+						<li><strong>Event:</strong> motion detected</li>
+					</ul>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Benefits</h3>
+					<ul>
+						<li>Interoperability</li>
+						<li>Reusable tools</li>
+						<li>Web developers can build IoT apps</li>
+					</ul>
+				</section>
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>W3C Standard</h3>
+					<p>Official web standard</p>
+					<p>Growing ecosystem</p>
+				</section>
+
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					What are the limits of IoT?
 				</section>
@@ -204,7 +291,6 @@
 				</section>
 				<section data-background-color="#289b85">
 					<h3>Thank you for your attention!</h3>
-					<img src="imgs/chrpaul-about-white.gif">
 					<p>chrpaul.de/about</p>
 				</section>
 			</div>
@@ -223,6 +309,294 @@
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+
+			// Web of Things Remote Control
+			class WoTSlideControl {
+				constructor() {
+					this.ws = null;
+					this.thingId = "https://wot.chrpaul.de/reveal.js/1";
+					this.reconnectInterval = 3000; // 3 seconds
+					this.maxReconnectAttempts = 50;
+					this.reconnectAttempts = 0;
+					this.isConnecting = false;
+					
+					// Track last known values to prevent echo loops
+					this.lastKnownValues = {
+						indexh: 0,
+						indexv: 0,
+						indexf: 0,
+						paused: false,
+						overview: false
+					};
+					
+					// Flag to ignore incoming messages temporarily
+					this.ignoreEchoes = false;
+					
+					this.connect();
+					this.setUpRevealListeners();
+				}
+
+				connect() {
+					if (this.isConnecting) return;
+					this.isConnecting = true;
+
+					console.log('Connecting to WoT slideshow control...');
+					
+					try {
+						this.ws = new WebSocket('wss://wot.chrpaul.de/');
+						
+						this.ws.onopen = () => {
+							console.log('WoT slideshow control connected');
+							this.reconnectAttempts = 0;
+							this.isConnecting = false;
+							
+							// Subscribe to property changes
+							this.subscribeToProperties();
+						};
+						
+						this.ws.onmessage = (event) => {
+							this.handleMessage(JSON.parse(event.data));
+						};
+						
+						this.ws.onclose = () => {
+							console.log('WoT slideshow control disconnected');
+							this.isConnecting = false;
+							this.scheduleReconnect();
+						};
+						
+						this.ws.onerror = (error) => {
+							console.error('WoT WebSocket error:', error);
+							this.isConnecting = false;
+						};
+						
+					} catch (error) {
+						console.error('Failed to create WebSocket connection:', error);
+						this.isConnecting = false;
+						this.scheduleReconnect();
+					}
+				}
+
+				subscribeToProperties() {
+					// Subscribe to slide navigation properties
+					const properties = ['indexh', 'indexv', 'indexf', 'paused', 'overview'];
+					
+					properties.forEach(prop => {
+						this.ws.send(JSON.stringify({
+							thingId: this.thingId,
+							messageType: "observeProperty",
+							property: prop
+						}));
+					});
+				}
+
+				scheduleReconnect() {
+					if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+						console.error('Max reconnection attempts reached. Giving up.');
+						return;
+					}
+					
+					this.reconnectAttempts++;
+					console.log(`Attempting to reconnect in ${this.reconnectInterval}ms... (attempt ${this.reconnectAttempts})`);
+					
+					setTimeout(() => {
+						this.connect();
+					}, this.reconnectInterval);
+				}
+
+				setUpRevealListeners() {
+					// Listen for slide changes
+					Reveal.on('slidechanged', (event) => {
+						this.updateWoTProperty('indexh', event.indexh);
+						this.updateWoTProperty('indexv', event.indexv);
+						this.updateWoTProperty('indexf', event.indexf || 0);
+					});
+					
+					// Listen for fragment changes
+					Reveal.on('fragmentshown', (event) => {
+						const indices = Reveal.getIndices();
+						this.updateWoTProperty('indexf', indices.f);
+					});
+					
+					Reveal.on('fragmenthidden', (event) => {
+						const indices = Reveal.getIndices();
+						this.updateWoTProperty('indexf', indices.f);
+					});
+					
+					// Listen for pause/resume
+					Reveal.on('paused', () => {
+						this.updateWoTProperty('paused', true);
+					});
+					
+					Reveal.on('resumed', () => {
+						this.updateWoTProperty('paused', false);
+					});
+					
+					// Listen for overview toggle
+					Reveal.on('overviewshown', () => {
+						this.updateWoTProperty('overview', true);
+					});
+					
+					Reveal.on('overviewhidden', () => {
+						this.updateWoTProperty('overview', false);
+					});
+				}
+
+				updateWoTProperty(property, value) {
+					// Only send if value actually changed and we're connected
+					if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+						if (this.lastKnownValues[property] !== value) {
+							console.log(`Updating WoT property ${property} to:`, value);
+							
+							// Set flag to ignore echo for a short time
+							this.ignoreEchoes = true;
+							setTimeout(() => { this.ignoreEchoes = false; }, 500);
+							
+							// Send property update
+							this.ws.send(JSON.stringify({
+								thingId: this.thingId,
+								messageType: "writeProperty",
+								property: property,
+								data: value
+							}));
+							
+							// Update our cache
+							this.lastKnownValues[property] = value;
+						}
+					}
+				}
+
+				handleMessage(message) {
+					try {
+						console.debug('WoT message received:', message);
+						console.debug('Message type:', message.messageType);
+						console.debug('Has property:', message.hasOwnProperty('property'));
+						console.debug('Has data:', message.hasOwnProperty('data'));
+						
+						// Ignore echoes of our own updates
+						if (this.ignoreEchoes) {
+							console.log('Ignoring echo message');
+							return;
+						}
+						
+						// Handle property updates - be flexible with message format
+						let property, value;
+						if (message.property && message.hasOwnProperty('data')) {
+							property = message.property;
+							value = message.data;
+						} else if (message.href && message.hasOwnProperty('data')) {
+							// Fallback for href-based format
+							const pathParts = message.href.split('/');
+							property = pathParts[pathParts.length - 1];
+							value = message.data;
+						} else {
+							console.debug('Unknown message format, skipping');
+							return;
+						}
+						
+						// Only process if value actually changed
+						if (this.lastKnownValues[property] === value) {
+							console.debug(`Property ${property} unchanged, skipping`);
+							return;
+						}
+						
+						console.log(`Property ${property} changed from ${this.lastKnownValues[property]} to:`, value);
+						this.lastKnownValues[property] = value;
+							
+						switch (property) {
+							case 'indexh':
+								// Navigate to horizontal slide
+								const currentIndices = Reveal.getIndices();
+								console.log(`Navigating from h:${currentIndices.h} to h:${value}`);
+								if (currentIndices.h !== value) {
+									Reveal.slide(value, currentIndices.v, currentIndices.f);
+								}
+								break;
+								
+							case 'indexv':
+								// Navigate to vertical slide
+								const currentIndicesV = Reveal.getIndices();
+								console.log(`Navigating from v:${currentIndicesV.v} to v:${value}`);
+								if (currentIndicesV.v !== value) {
+									Reveal.slide(currentIndicesV.h, value, currentIndicesV.f);
+								}
+								break;
+								
+							case 'indexf':
+								// Navigate to fragment
+								const currentIndicesF = Reveal.getIndices();
+								console.log(`Navigating from f:${currentIndicesF.f} to f:${value}`);
+								if (currentIndicesF.f !== value) {
+									Reveal.slide(currentIndicesF.h, currentIndicesF.v, value);
+								}
+								break;
+								
+							case 'paused':
+								// Properly convert to boolean
+								const pausedValue = (value === true || value === 'true' || value === 1 || value === '1');
+								console.log(`Setting paused to ${pausedValue} (received: ${value}, type: ${typeof value}), currently paused: ${Reveal.isPaused()}`);
+								console.log('Available Reveal methods:', Object.getOwnPropertyNames(Reveal).filter(name => name.includes('pause') || name.includes('Pause')));
+								
+								if (pausedValue === true && !Reveal.isPaused()) {
+									console.log('Pausing slideshow');
+									if (typeof Reveal.togglePause === 'function') {
+										Reveal.togglePause();
+									} else if (typeof Reveal.pause === 'function') {
+										Reveal.pause();
+									} else {
+										console.error('No pause method found');
+									}
+								} else if (pausedValue === false && Reveal.isPaused()) {
+									console.log('Resuming slideshow');
+									if (typeof Reveal.togglePause === 'function') {
+										Reveal.togglePause();
+									} else if (typeof Reveal.resume === 'function') {
+										Reveal.resume();
+									} else {
+										console.error('No resume method found');
+									}
+								}
+								break;
+								
+							case 'overview':
+								// Properly convert to boolean
+								const overviewValue = (value === true || value === 'true' || value === 1 || value === '1');
+								console.log(`Setting overview to ${overviewValue} (received: ${value}, type: ${typeof value}), currently overview: ${Reveal.isOverview()}`);
+								console.log('Available Reveal overview methods:', Object.getOwnPropertyNames(Reveal).filter(name => name.toLowerCase().includes('overview')));
+								
+								if (overviewValue === true && !Reveal.isOverview()) {
+									console.log('Showing overview');
+									if (typeof Reveal.toggleOverview === 'function') {
+										Reveal.toggleOverview();
+									} else {
+										console.error('No toggleOverview method found');
+									}
+								} else if (overviewValue === false && Reveal.isOverview()) {
+									console.log('Hiding overview');
+									if (typeof Reveal.toggleOverview === 'function') {
+										Reveal.toggleOverview();
+									} else {
+										console.error('No toggleOverview method found');
+									}
+								}
+								break;
+						}
+					} catch (error) {
+						console.error('Error handling WoT message:', error);
+					}
+				}
+
+				disconnect() {
+					if (this.ws) {
+						this.ws.close();
+						this.ws = null;
+					}
+				}
+			}
+
+			// Initialize WoT remote control when reveal.js is ready
+			Reveal.on('ready', () => {
+				window.wotControl = new WoTSlideControl();
 			});
 		</script>
 	</body>
