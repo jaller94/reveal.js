@@ -383,9 +383,11 @@
 					
 					properties.forEach(prop => {
 						this.ws.send(JSON.stringify({
-							thingId: this.thingId,
-							messageType: "observeProperty",
-							property: prop
+							thingID: this.thingId,
+							messageID: crypto.randomUUID(),
+							messageType: 'request',
+							operation: "observeproperty",
+							name: prop,
 						}));
 					});
 				}
@@ -454,10 +456,11 @@
 							
 							// Send property update
 							this.ws.send(JSON.stringify({
-								thingId: this.thingId,
-								messageType: "writeProperty",
-								property: property,
-								data: value
+								thingID: this.thingId,
+								messageID: crypto.randomUUID(),
+								messageType: 'request',
+								name: property,
+								value,
 							}));
 							
 							// Update our cache
@@ -469,41 +472,33 @@
 				handleMessage(message) {
 					try {
 						console.debug('WoT message received:', message);
-						console.debug('Message type:', message.messageType);
-						console.debug('Has property:', message.hasOwnProperty('property'));
-						console.debug('Has data:', message.hasOwnProperty('data'));
-						
+
 						// Ignore echoes of our own updates
-						if (this.ignoreEchoes) {
+						if (message.messageType === 'notification' && message.operation === 'observeproperty' && this.ignoreEchoes) {
 							console.log('Ignoring echo message');
 							return;
 						}
 						
 						// Handle property updates - be flexible with message format
-						let property, value;
-						if (message.property && message.hasOwnProperty('data')) {
-							property = message.property;
-							value = message.data;
-						} else if (message.href && message.hasOwnProperty('data')) {
-							// Fallback for href-based format
-							const pathParts = message.href.split('/');
-							property = pathParts[pathParts.length - 1];
-							value = message.data;
+						let propertyName, value;
+						if (message.value && message.hasOwnProperty('value')) {
+							propertyName = message.name;
+							value = message.value;
 						} else {
 							console.debug('Unknown message format, skipping');
 							return;
 						}
 						
 						// Only process if value actually changed
-						if (this.lastKnownValues[property] === value) {
-							console.debug(`Property ${property} unchanged, skipping`);
+						if (this.lastKnownValues[propertyName] === value) {
+							console.debug(`Property ${propertyName} unchanged, skipping`);
 							return;
 						}
 						
-						console.log(`Property ${property} changed from ${this.lastKnownValues[property]} to:`, value);
-						this.lastKnownValues[property] = value;
+						console.log(`Property ${propertyName} changed from ${this.lastKnownValues[propertyName]} to:`, value);
+						this.lastKnownValues[propertyName] = value;
 							
-						switch (property) {
+						switch (propertyName) {
 							case 'indexh':
 								// Navigate to horizontal slide
 								const currentIndices = Reveal.getIndices();
