@@ -40,43 +40,12 @@
 				</section>
 
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>Internet of Things</h3>
-					<p style="font-size: 2em; text-align: center;">📱 💡 🚗 🏠</p>
-					<p>Connected devices everywhere</p>
-				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>The Problem</h3>
-					<ul>
-						<li>Proprietary protocols</li>
-						<li>Vendor lock-in</li>
-						<li>Fragmented ecosystem</li>
-					</ul>
-				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>Web of Things</h3>
-					<p style="font-size: 1.5em;">IoT + Web Standards</p>
-				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>Web Standards</h3>
-					<ul>
-						<li>HTTP/HTTPS</li>
-						<li>JSON</li>
-						<li>WebSockets</li>
-						<li>REST APIs</li>
-					</ul>
-				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<h3>Thing Description</h3>
-					<p>JSON-LD metadata</p>
-					<p>Describes device capabilities</p>
+					<p>JSON document describing semantics and endpoints</p>
 				</section>
 
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>Three Interaction Models</h3>
+					<h3>Three interaction models</h3>
 					<ul>
 						<li><strong>Properties</strong> - Read/Write state</li>
 						<li><strong>Actions</strong> - Invoke functions</li>
@@ -88,61 +57,35 @@
 					<h3>Example: Smart Lamp</h3>
 					<ul>
 						<li><strong>Property:</strong> brightness, color</li>
-						<li><strong>Action:</strong> toggle, fade</li>
-						<li><strong>Event:</strong> motion detected</li>
+						<li><strong>Action:</strong> fade, animate</li>
+						<li><strong>Event:</strong> overheating detected</li>
 					</ul>
 				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>Benefits</h3>
-					<ul>
-						<li>Interoperability</li>
-						<li>Reusable tools</li>
-						<li>Web developers can build IoT apps</li>
-					</ul>
-				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>W3C Standard</h3>
-					<p>Official web standard</p>
-					<p>Growing ecosystem</p>
-				</section>
-
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					What are the limits of IoT?
-				</section>
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<img src="imgs/2018_youtube.png">
-					<p>My WoT journey started building things with Express.js, e.g. a countdown and a virtual lamp.<br>I even recorded a tutorial about it.</p>
-				</section>
+				
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<h3>Building a Thing server</h3>
 					<ol>
-						<li>Define the server</li>
-						<li>Define the Things</li>
-						<li>Let the server expose the things</li>
+						<li>Define the Thing</li>
+						<li>Let the server expose the Thing</li>
 					</ol>
 				</section>
+<!-- 				
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<p>But what if there are too many Things you want to represent? It would be too much for your CPU, storage, RAM and network to handle them all simultaneously.
-				</section>
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<p>But what if there are too many Things you want to represent? It would be too much for your CPU, storage, RAM and network to handle them all simultaneously.</p>
+				</section> -->
+				
+				<!-- <section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<img src="imgs/2019_osm-forum-post.png">
 				</section>
+				
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<img src="imgs/vpl-osm.png">
 				</section>
+				
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<img src="imgs/vpl-webthings.png">
 				</section>
-				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
-					<h3>Building a dynamic Thing server</h3>
-					<ol>
-						<li>Define the server</li>
-						<li>Start the server</li>
-						<li>Initialize Things on demand</li>
-					</ol>
-				</section>
+				
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<p>
 						Vancouver Public Library:<br>
@@ -155,6 +98,7 @@
 						<li>37111640 - The way ID of the library on OSM</li>
 					</ul>
 				</section>
+				
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<h3>When a new element gets requested</h3>
 					<ol>
@@ -164,19 +108,27 @@
 						<li>Parse the opening_hours string</li>
 						<li>Set timeouts for when the place opens / closes</li>
 					</ol>
-				</section>
+				</section> -->
 
 				<section data-background-color="#17b2c3">
 					<p>🌌 WoT Anything</p>
 					<p>An extensible Thing server with on demand initialisation of Things</p>
 				</section>
+
+				<section data-background-color="#17b2c3">
+					<p>🔧 WoT Wrench</p>
+					<p>A web app to test and debug Things. It's a consumer.</p>
+				</section>
+
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<img src="imgs/youbike-station-irl.jpg">
 				</section>
+
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					City bike station:<br>
 					<span>/youbikes/501202040</span>
 				</section>
+
 				<section>
 					See a YouBike station in Taiwan:<br>
 					<a href="https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/youbikes/501202040">https://wot-wrench.chrpaul.de/#try=https://wot.chrpaul.de/youbikes/501202040</a>
@@ -230,10 +182,6 @@
 					Note, all three Art-Net Things you just tried, share some or all channels. The mapping is performed by the WoT Anything server.
 				</section>
 
-				<section data-background-color="#17b2c3">
-					<p>🌌 WoT Wrench</p>
-					<p>A web app to test and debug Things. It's a consumer.</p>
-				</section>
 				<section>
 					See it generate some UI for these virtual Things:<br>
 					
@@ -267,7 +215,6 @@
 					<h3>Incomplete feature wishlist</h3>
 					<ul>
 						<li>Optimistic UI</li>
-						<li>Observing Events</li>
 						<li>Async Actions</li>
 						<li>Input selector</li>
 						<li>uriVariables</li>
@@ -285,8 +232,6 @@
 						<li>Provide mentorship for self-employment</li>
 						<li>Hire me to work on these projects</li>
 						<li>Help with the UX design</li>
-						<li>Send me your things (TDs, URLs)</li>
-						<li>Talk to me online or at WoT Week in November 2024</li>
 					</ul>
 				</section>
 				<section data-background-color="#289b85">
@@ -386,7 +331,7 @@
 							thingID: this.thingId,
 							messageID: crypto.randomUUID(),
 							messageType: 'request',
-							operation: "observeproperty",
+							operation: 'observeproperty',
 							name: prop,
 						}));
 					});
