@@ -65,8 +65,9 @@
 				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
 					<h3>Building a Thing server</h3>
 					<ol>
-						<li>Define the Thing</li>
-						<li>Let the server expose the Thing</li>
+						<li>Build the thing</li>
+						<li>Define the Thing Description</li>
+						<li>Expose it on the network</li>
 					</ol>
 				</section>
 <!-- 				
@@ -109,6 +110,10 @@
 						<li>Set timeouts for when the place opens / closes</li>
 					</ol>
 				</section> -->
+
+				<section data-background-gradient="linear-gradient(to top, #289b85, #17b2c3)">
+					<h3>Demo time</h3>
+				</section>
 
 				<section data-background-color="#17b2c3">
 					<p>🌌 WoT Anything</p>
@@ -389,11 +394,11 @@
 					});
 				}
 
-				updateWoTProperty(property, value) {
+				updateWoTProperty(propertyName, value) {
 					// Only send if value actually changed and we're connected
 					if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-						if (this.lastKnownValues[property] !== value) {
-							console.log(`Updating WoT property ${property} to:`, value);
+						if (this.lastKnownValues[propertyName] !== value) {
+							console.log(`Updating WoT property ${propertyName} to:`, value);
 							
 							// Set flag to ignore echo for a short time
 							this.ignoreEchoes = true;
@@ -404,12 +409,13 @@
 								thingID: this.thingId,
 								messageID: crypto.randomUUID(),
 								messageType: 'request',
-								name: property,
+								operation: 'writeproperty',
+								name: propertyName,
 								value,
 							}));
 							
 							// Update our cache
-							this.lastKnownValues[property] = value;
+							this.lastKnownValues[propertyName] = value;
 						}
 					}
 				}
@@ -426,7 +432,7 @@
 						
 						// Handle property updates - be flexible with message format
 						let propertyName, value;
-						if (message.value && message.hasOwnProperty('value')) {
+						if (message.hasOwnProperty('value')) {
 							propertyName = message.name;
 							value = message.value;
 						} else {
